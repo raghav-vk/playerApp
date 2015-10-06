@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:int="http://www.springframework.org/schema/integration"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/integration/groovy http://www.springframework.org/schema/integration/groovy/spring-integration-groovy.xsd"
+	xmlns:groovy="http://www.springframework.org/schema/integration/groovy">
+
+	<bean id="yqlRestTemplate" class="org.springframework.web.client.RestTemplate">
+		<property name="requestFactory">
+			<bean class="org.springframework.http.client.HttpComponentsClientHttpRequestFactory">
+				<property name="connectTimeout" value="30000"/>
+				<property name="readTimeout" value="30000"/>
+			</bean>
+		</property>
+		<property name="errorHandler" ref="responseErrorHandler"/>
+	</bean>
+	
+	<bean id="responseErrorHandler" class="com.cric.player.service.CricPlayerResponseErrorHandler"/>
+	
+	<bean id="yqlClient" class="com.cric.player.integration.client.YQLClientImpl">
+		<property name="serviceUrl" value="${yql.service.endpoint}"/>	
+	</bean>
+	
+	<bean id="yqlService" class="com.cric.player.service.YQLServiceImpl" />
+</beans>
